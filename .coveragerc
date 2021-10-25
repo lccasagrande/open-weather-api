@@ -1,0 +1,7 @@
+[run]
+include = api/*
+concurrency = threading
+omit =
+    api/__init__.py
+    api/__version__.py
+timid = True
