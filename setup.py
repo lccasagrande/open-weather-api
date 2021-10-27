@@ -1,5 +1,6 @@
 import os
 
+import pkg_resources
 from setuptools import find_packages, setup
 
 about = {}
@@ -8,11 +9,11 @@ with open(os.path.join(here, "api", "__version__.py")) as f:
     exec(f.read(), about)
 
 
-with open("README.md", "r") as f:
+with open(os.path.join(here, "requirements.txt")) as f:
+    install_requires = [str(req) for req in pkg_resources.parse_requirements(f)]
+
+with open(os.path.join(here, "README.md")) as f:
     readme = f.read()
-
-
-required_packages = []
 
 extras = {
     "test": [
@@ -39,7 +40,7 @@ setup(
     long_description_content_type="text/markdown",
     license=about["__license__"],
     python_requires=">=3.8",
-    install_requires=required_packages,
+    install_requires=install_requires,
     extras_require=extras,
     classifiers=[
         "Development Status :: 3 - Alpha",
