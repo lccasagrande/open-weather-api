@@ -22,6 +22,7 @@ extras = {
         "flake8",
         "pydocstyle",
         "pytest",
+        "pytest-asyncio",
         "pytest-mock",
         "pytest-cov",
         "tox",
