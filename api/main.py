@@ -1,3 +1,4 @@
+"""API application."""
 from typing import Dict
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException, status
@@ -22,16 +23,20 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def startup():
+    """Connect everything."""
     await database.connect()
 
 
 @app.on_event("shutdown")
 async def shutdown():
+    """Disconnect everything."""
     await database.disconnect()
 
 
 @app.post("/", status_code=202)
 async def populate_weather(user_request: schemas.UserRequest, background_tasks: BackgroundTasks):
+    """Handle requests for city weathers."""
+
     user_id = user_request.user_id
     query = select(UserRequest).where(UserRequest.user_id == user_id)
     exist = await database.fetch_one(query)
@@ -55,6 +60,7 @@ async def populate_weather(user_request: schemas.UserRequest, background_tasks: 
 
 @app.get("/{user_id}", summary="Get user task progress")
 async def get_progress(user_id: int):
+    """Get requests progress."""
     task = task_pool.get(user_id, None)
     if task:
         return {"Progress": f"{task.progress} %"}

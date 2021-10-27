@@ -1,3 +1,4 @@
+"""Background tasks for handling API requests."""
 import asyncio
 from datetime import datetime
 from typing import Any, List
@@ -10,6 +11,8 @@ from .utils import CityWeather, WeatherClient
 
 
 class GetWeatherBackgroundTask:
+    """Background task to handle weather requests."""
+
     def __init__(
         self,
         cities: List[int],
@@ -18,6 +21,15 @@ class GetWeatherBackgroundTask:
         user_id: int,
         retry_total=3,
     ) -> None:
+        """Task to get city weather and store it.
+
+        Args:
+            cities: a list with city ids.
+            database: the database session to store the weather data.
+            weather_client: the weather client to request for weather data.
+            user_id: the user id.
+            retry_total: total number of request retries.
+        """
         self.user_id = user_id
         self.weather_client = weather_client
         self.database = database
@@ -29,11 +41,20 @@ class GetWeatherBackgroundTask:
 
     @property
     def progress(self) -> float:
+        """Return the task progress."""
         if self._n_coroutines > 0:
             return round(self._progress / float(self._n_coroutines) * 100, 2)
         return 0
 
     async def _get_cities_weather(self, cities_id: List[int]) -> List[CityWeather]:
+        """Request the city weather.
+
+        Args:
+            cities_id: a list with the cities id.
+
+        Returns:
+            a list with cities weather
+        """
         self._n_coroutines = len(cities_id)
         cities_weather: List[CityWeather] = []
 
@@ -49,6 +70,11 @@ class GetWeatherBackgroundTask:
         return cities_weather
 
     async def run(self) -> None:
+        """Run the task.
+
+        It will request for city weather and store it in database.
+
+        """
         self.status = "Running"
         request_time = datetime.utcnow()
 
