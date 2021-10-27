@@ -17,8 +17,8 @@ class Settings(BaseSettings):
         database_url: the URL to connect to the database.
     """
 
-    weather_api_key: str
-    database_url: str
+    weather_api_key: str = ""
+    database_url: str = "sqlite:///./sql_app.db"
 
 
 @lru_cache()
@@ -102,7 +102,9 @@ class WeatherClient:
         self.api_key = get_settings().weather_api_key
         self.rate_limit = AsyncLimiter(max_rate, time_period)
 
-    async def get(self, http_session: aiohttp.ClientSession, city_id: int) -> CityWeather:
+    async def get(
+        self, http_session: aiohttp.ClientSession, city_id: int
+    ) -> CityWeather:
         """Get city weather from OpenWeather API.
 
         Args:
