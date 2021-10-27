@@ -3,7 +3,10 @@ import databases
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 
-from .utils import settings
+from .utils import get_settings
+
+
+settings = get_settings()
 
 database = databases.Database(settings.database_url)
 

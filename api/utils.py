@@ -1,6 +1,7 @@
 """Utilities for handling env vars and API requests."""
 import os
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import List
 
 import aiohttp
@@ -20,7 +21,10 @@ class Settings(BaseSettings):
     database_url: str
 
 
-settings = Settings()
+@lru_cache()
+def get_settings() -> Settings:
+    """Return settings from cache."""
+    return Settings()
 
 
 @dataclass
@@ -95,7 +99,7 @@ class WeatherClient:
         Attributes:
             BASE_URL: OpenWeather API base url.
         """
-        self.api_key = settings.weather_api_key
+        self.api_key = get_settings().weather_api_key
         self.rate_limit = AsyncLimiter(max_rate, time_period)
 
     async def get(self, http_session: aiohttp.ClientSession, city_id: int) -> CityWeather:
@@ -114,4 +118,4 @@ class WeatherClient:
                 if response.status == 200:
                     json_data = await response.json()
                     return CityWeather.from_json(json_data)
-                response.raise_for_status()
+                await response.raise_for_status()
