@@ -73,7 +73,6 @@ class GetWeatherBackgroundTask:
         """Run the task.
 
         It will request for city weather and store it in database.
-
         """
         self.status = "Running"
         request_time = datetime.utcnow()
