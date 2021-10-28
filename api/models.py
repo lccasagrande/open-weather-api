@@ -1,7 +1,7 @@
 """Database schemas."""
 from sqlalchemy import JSON, Column, DateTime, Integer
 
-from .database import Base
+from api.database import Base
 
 
 class UserRequest(Base):

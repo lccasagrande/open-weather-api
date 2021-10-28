@@ -4,11 +4,11 @@ from typing import Dict
 from fastapi import BackgroundTasks, FastAPI, HTTPException, status
 from sqlalchemy import select
 
-from . import schemas
-from .database import database, engine
-from .models import Base, UserRequest
-from .tasks import GetWeatherBackgroundTask
-from .utils import WeatherClient, get_cities
+from api import schemas
+from api.database import database, engine
+from api.models import Base, UserRequest
+from api.tasks import GetWeatherBackgroundTask
+from api.utils import WeatherClient, get_cities
 
 Base.metadata.create_all(bind=engine)
 
