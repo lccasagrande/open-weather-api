@@ -6,8 +6,8 @@ import aiohttp
 
 from sqlalchemy import insert
 
-from .models import UserRequest
-from .utils import CityWeather, WeatherClient
+from api.models import UserRequest
+from api.utils import CityWeather, WeatherClient
 
 
 class GetWeatherBackgroundTask:
@@ -82,9 +82,9 @@ class GetWeatherBackgroundTask:
         while retry < self.retry_total and not cities_weather:
             try:
                 cities_weather = await self._get_cities_weather(self.cities)
-            except Exception as exc:
+            except Exception as e:
                 retry += 1
-                exc = exc
+                exc = e
 
         if not cities_weather:
             self.status = "Error"
